@@ -25,12 +25,15 @@ public class PlayerStats
         // TODO code application logic here
         String[] names = new String[80];
         int[] scores = new int[80];
+        String file="playerData2.txt";
         
         /*declaration, instatiation (new), and initialization
         = new (instatiation)
         
         */
-        readData(names, scores, args[0]);
+        readData(names, scores, file);
+        averageHS(scores);
+        selectionSort(names,scores,scores.length);
     }
     public static void readData(String[] names, int[] scores, String filename)
     {
@@ -47,8 +50,7 @@ public class PlayerStats
                 names[currentIndex]=line[0];
                 
                 scores[currentIndex]=Integer.parseInt(line[1]);
-                
-                
+
                 currentIndex++;
             }
             
@@ -57,29 +59,63 @@ public class PlayerStats
            System.err.println("Unable to read file");
         }
         displayData(names, scores);
-        System.out.println(average(scores));
-        
-        
     }
     public static void displayData(String []names, int[] scores)
     {
-        for (int i=0;i<names.length+1;i++)
+        for (int i=0;i<names.length;i++)
         {
             String str1=String.format("%10s ",names[i]);
             String str2=String.format("%10d ",scores[i]);
             System.out.println(str1+ " " +str2);
         }
     }
-    public static double average(int[] scores)
-    {
-        double ave;
-        int total = 0;
-        for (int i=0; i<scores.length+1;i++)
+        public static void displayData(String []names, int[] scores,int sizes)
         {
-            total=scores[i]++;
+            for (int i=0;i<sizes;i++)
+            {
+                String str1=String.format("%10s ",names[i]);
+                String str2=String.format("%10d ",scores[i]);
+                System.out.println(str1+ " " +str2);
+            }
         }
-        ave= total/scores.length;
-        return ave;
+    public static void averageHS(int[] scores)
+    {
+        double avg;
+        double total = 0;
+        for (int i=0; i<scores.length;i++)
+        {
+            total+=scores[i];
+        }
+        avg= total/scores.length;
+        System.out.println(" average is: "+avg);
     }
-    
+    public static void selectionSort(String[] names,int[] scores, int n)
+    {
+        int tempScores=scores[0];
+        String tempNames=names[0];
+
+        // One by one move boundary of unsorted subarray
+        for (int i = 0; i < n-1; i++)
+        {
+            // Find the minimum element in unsorted array
+            int minIdx=i;
+            for (int j = i+1; j < n; j++)
+            {
+              if (scores[j] > scores[minIdx])
+              {
+                minIdx = j;
+              }
+              tempScores=scores[minIdx];
+              tempNames=names[minIdx];
+              scores[minIdx]=scores[i];
+              names[minIdx]=names[i];
+              scores[i]=tempScores;
+              names[i]=tempNames;
+            }
+            
+
+        }
+        System.out.println("Sorted List: ");
+        displayData(names,scores,10);
+    }
 }
